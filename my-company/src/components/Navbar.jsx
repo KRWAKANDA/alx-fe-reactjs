@@ -9,7 +9,7 @@ function Navbar() {
       display: 'flex',
       gap: '20px',
       alignItems: 'center'
-      backgroundColor: 'justifyContent'
+      backgroundcolor: 'justifyContent'
     }}>
       <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>Home</Link>
       <Link to="/about" style={{ color: '#fff', textDecoration: 'none' }}>About</Link>
@@ -19,4 +19,5 @@ function Navbar() {
   );
 }
 export default Navbar;
+
 
