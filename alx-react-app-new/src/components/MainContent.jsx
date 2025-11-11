@@ -6,6 +6,7 @@ function MainContent() {
     <main style={{ backgroundColor: '#f0f8ff', padding: '20px', textAlign: 'justify', lineHeight: '1.6' }}>
       <h2 style={{ color: '#333' }}>Welcome to my city guide!</h2>
       <p>Here you'll find a collection of my favorite cities and interesting facts about them.</p>
+       <p>I love to visit New York, Paris, and Tokyo.</p>
       <UserProfile name="Tyrone" age={28} bio="A passionate web developer who loves learning React." />
       <UserProfile name="Sarah" age={25} bio="Traveler and foodie who enjoys new adventures." />
       
@@ -14,4 +15,5 @@ function MainContent() {
 }
 
 export default MainContent;
+
 
