@@ -10,3 +10,26 @@ export const fetchUserData = async (username) => {
     throw error;
   }
 };
+export async function searchUsers(username, location = "", minRepos = "") {
+  try {
+    let query = username || "";
+    if (location) query += `+location:${location}`;
+    if (minRepos) query += `+repos:>=${minRepos}`;
+
+    const response = await fetch(`https://api.github.com/search/users?q=${query}&per_page=20`);
+    const data = await response.json();
+
+    // Fetch additional details for each user to get location and repos
+    const usersDetails = await Promise.all(
+      data.items.map(async (user) => {
+        const res = await fetch(user.url);
+        return await res.json();
+      })
+    );
+
+    return usersDetails;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return [];
+  }
+}
