@@ -1,7 +1,5 @@
-import React from "react";
 import React, { useState } from "react";
-import { fetchUserData } from "../services/githubService";
-import UserCard from "./UserCard";
+import axios from "axios";
 
 function Search() {
   const [username, setUsername] = useState("");
@@ -22,10 +20,10 @@ function Search() {
     setUser(null);
 
     try {
-      const data = await fetchUserData(username);
-      setUser(data);
+      const response = await axios.get(`https://api.github.com/users/${username}`);
+      setUser(response.data);
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError("Looks like we cant find the user");
     } finally {
       setLoading(false);
     }
@@ -46,11 +44,26 @@ function Search() {
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      {user && <UserCard user={user} />}
+
+      {user && (
+        <div style={{
+          border: "1px solid #ddd",
+          padding: "20px",
+          borderRadius: "10px",
+          width: "300px"
+        }}>
+          <img
+            src={user.avatar_url} 
+            alt={user.login} 
+            style={{ width: "100px", borderRadius: "50%" }}
+          />
+          <h2>{user.name || user.login}</h2>
+          <p>{user.bio || "No bio available"}</p>
+          <a href={user.html_url} target="_blank">View Profile</a>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Search;
-
-
