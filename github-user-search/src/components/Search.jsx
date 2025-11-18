@@ -7,6 +7,16 @@ function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // ✅ fetchUserData function
+  const fetchUserData = async (username) => {
+    try {
+      const response = await axios.get(`https://api.github.com/users/${username}`);
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   const handleInputChange = (e) => {
     setUsername(e.target.value);
   };
@@ -20,8 +30,8 @@ function Search() {
     setUser(null);
 
     try {
-      const response = await axios.get(`https://api.github.com/users/${username}`);
-      setUser(response.data);
+      const data = await fetchUserData(username); // ✅ use fetchUserData
+      setUser(data);
     } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
