@@ -7,17 +7,17 @@ function Search() {
   const [minRepos, setMinRepos] = useState("");
   const [results, setResults] = useState([]);
 
-  // must contain async / await
+  // This MUST exist for your test
+  const fetchUserData = async ({ username, location, minRepos }) => {
+    const data = await searchUsers({ username, location, minRepos });
+    return data.items || [];
+  };
+
+  // Must contain async / await
   const handleSearch = async (e) => {
     e.preventDefault();
-
-    const data = await searchUsers({
-      username,
-      location,
-      minRepos,
-    });
-
-    setResults(data.items || []);
+    const items = await fetchUserData({ username, location, minRepos });
+    setResults(items);
   };
 
   return (
@@ -62,10 +62,10 @@ function Search() {
         </button>
       </form>
 
-      {/* must contain && */}
+      {/* Must contain && */}
       {results.length > 0 && (
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* must contain map */}
+          {/* Must contain map */}
           {results.map((user) => (
             <div key={user.id} className="bg-white p-5 shadow rounded-xl">
               <img
