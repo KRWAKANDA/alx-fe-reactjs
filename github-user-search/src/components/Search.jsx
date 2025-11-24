@@ -1,96 +1,68 @@
-import { useState } from "react";
-import { searchUsers } from "../services/githubService";
+import React, { useState } from "react";
+import { fetchUserData } from "../services/githubService";
 
-function Search() {
+const Search = () => {
   const [username, setUsername] = useState("");
-  const [location, setLocation] = useState("");
-  const [minRepos, setMinRepos] = useState("");
-  const [results, setResults] = useState([]);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // This MUST exist for your test
-  const fetchUserData = async ({ username, location, minRepos }) => {
-    const data = await searchUsers({ username, location, minRepos });
-    return data.items || [];
-  };
-
-  // Must contain async / await
-  const handleSearch = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const items = await fetchUserData({ username, location, minRepos });
-    setResults(items);
+    setLoading(true);
+    setError("");
+    setData(null);
+
+    try {
+      const userData = await fetchUserData(username);
+      setData(userData);
+    } catch (err) {
+      setError("Looks like we cant find the user");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10">
-      <form
-        onSubmit={handleSearch}
-        className="p-6 bg-white shadow-lg rounded-xl space-y-4"
-      >
-        <h2 className="text-2xl font-bold">Advanced GitHub User Search</h2>
-
+    <div style={{ maxWidth: "400px", margin: "auto" }}>
+      <form onSubmit={handleSubmit}>
         <input
-          className="w-full p-2 border rounded"
           type="text"
-          placeholder="Search by username"
+          placeholder="Enter GitHub username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
+          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
-
-        <input
-          className="w-full p-2 border rounded"
-          type="text"
-          placeholder="Location (optional)"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-
-        <input
-          className="w-full p-2 border rounded"
-          type="number"
-          placeholder="Minimum repositories (optional)"
-          value={minRepos}
-          onChange={(e) => setMinRepos(e.target.value)}
-          min="0"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-        >
+        <button type="submit" style={{ padding: "10px 20px" }}>
           Search
         </button>
       </form>
 
-      {/* Must contain && */}
-      {results.length > 0 && (
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Must contain map */}
-          {results.map((user) => (
-            <div key={user.id} className="bg-white p-5 shadow rounded-xl">
-              <img
-                src={user.avatar_url}
-                alt={user.login}
-                className="w-20 h-20 rounded-full mx-auto"
-              />
+      {/* Conditional Rendering */}
 
-              <h3 className="text-center mt-4 font-semibold text-lg">
-                {user.login}
-              </h3>
+      {loading && <p>Loading...</p>}
 
-              <a
-                href={user.html_url}
-                target="_blank"
-                className="block mt-4 bg-blue-600 text-white py-2 text-center rounded-lg"
-              >
-                View Profile
-              </a>
-            </div>
-          ))}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {data && (
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <img
+            src={data.avatar_url}
+            alt="User Avatar"
+            style={{ width: "100px", borderRadius: "50%" }}
+          />
+          <h3>{data.name || data.login}</h3>
+          <a
+            href={data.html_url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Visit GitHub Profile
+          </a>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default Search;
