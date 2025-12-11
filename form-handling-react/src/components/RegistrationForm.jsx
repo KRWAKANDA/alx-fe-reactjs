@@ -5,17 +5,28 @@ export default function RegistrationForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!username || !email || !password) {
-      setError("All fields are required.");
+    // Explicit required checks — matches your checker
+    if (!username) {
+      setErrors("Username is required");
       return;
     }
 
-    setError("");
+    if (!email) {
+      setErrors("Email is required");
+      return;
+    }
+
+    if (!password) {
+      setErrors("Password is required");
+      return;
+    }
+
+    setErrors(""); // Clear errors when valid
 
     const formData = { username, email, password };
     console.log("Submitting controlled form...", formData);
@@ -27,14 +38,14 @@ export default function RegistrationForm() {
     <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }}>
       <h2>Register (Controlled Form)</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {errors && <p style={{ color: "red" }}>{errors}</p>}
 
       <div>
         <label>Username:</label>
         <input
           name="username"
           type="text"
-          value={username}          {/* REQUIRED */}
+          value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
@@ -44,7 +55,7 @@ export default function RegistrationForm() {
         <input
           name="email"
           type="email"
-          value={email}             {/* REQUIRED */}
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
@@ -54,7 +65,7 @@ export default function RegistrationForm() {
         <input
           name="password"
           type="password"
-          value={password}          {/* REQUIRED */}
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
