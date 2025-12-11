@@ -1,34 +1,24 @@
 import { useState } from "react";
 
 export default function RegistrationForm() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [errors, setErrors] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.email || !formData.password) {
-      setErrors("All fields are required.");
+    if (!username || !email || !password) {
+      setError("All fields are required.");
       return;
     }
 
-    setErrors("");
+    setError("");
 
-    // Mock API simulation
-    console.log("Submitting data to API...", formData);
+    const formData = { username, email, password };
+    console.log("Submitting controlled form...", formData);
 
     alert("User registered successfully (controlled form)");
   };
@@ -37,15 +27,15 @@ export default function RegistrationForm() {
     <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }}>
       <h2>Register (Controlled Form)</h2>
 
-      {errors && <p style={{ color: "red" }}>{errors}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div>
         <label>Username:</label>
         <input
           name="username"
           type="text"
-          value={formData.username}
-          onChange={handleChange}
+          value={username}          {/* REQUIRED */}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </div>
 
@@ -54,8 +44,8 @@ export default function RegistrationForm() {
         <input
           name="email"
           type="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}             {/* REQUIRED */}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
@@ -64,8 +54,8 @@ export default function RegistrationForm() {
         <input
           name="password"
           type="password"
-          value={formData.password}
-          onChange={handleChange}
+          value={password}          {/* REQUIRED */}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
 
