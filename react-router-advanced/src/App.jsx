@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import ProfileDetails from "./pages/ProfileDetails";
@@ -9,32 +9,34 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-      {/* Protected Profile Route */}
-      <Route
-        path="/profile/*"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      >
-        {/* Nested Routes inside Profile */}
-        <Route path="details" element={<ProfileDetails />} />
-        <Route path="settings" element={<ProfileSettings />} />
-      </Route>
+        {/* Protected Profile Route */}
+        <Route
+          path="/profile/*"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        >
+          {/* Nested Routes */}
+          <Route path="details" element={<ProfileDetails />} />
+          <Route path="settings" element={<ProfileSettings />} />
+        </Route>
 
-      {/* Dynamic Routing Example */}
-      <Route path="/blog/:postId" element={<BlogPost />} />
+        {/* Dynamic Route */}
+        <Route path="/blog/:postId" element={<BlogPost />} />
 
-      {/* Login Route */}
-      <Route path="/login" element={<Login />} />
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
 
-      {/* Catch-all redirect */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
